@@ -1,25 +1,30 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import ParticipantList from '../components/ui/ParticipantList';
 
-const SorteoPage = () => {
+const HomePage = () => {
   const [selected, setSelected] = useState(null);
+  const navigate = useNavigate();
 
   const participants = Array.from({ length: 25 }, (_, i) => ({
+    id: i + 1,
     nombre: `Participante ${i + 1}`,
     foto: `https://via.placeholder.com/50`,
   }));
 
+
   const handleSelect = (participant) => {
     setSelected(participant);
+    navigate(`/bombo1/${encodeURIComponent(participant.nombre)}`);
   };
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center p-4 bg-gray-100">
       <h2 className="text-2xl font-bold mb-6 text-center">Sorteo de Equipos</h2>
-      
-      <Card title="Líder del equipo" className="w-full mb-8 max-w-2xl">
+
+      <Card title="Selecciona un Participante" className="w-full mb-8 max-w-2xl">
         {selected && (
           <div className="mt-4 text-center">
             <img
@@ -31,7 +36,7 @@ const SorteoPage = () => {
           </div>
         )}
       </Card>
-      
+
       <h3 className="text-xl font-semibold text-center mb-4">Participantes:</h3>
       <div className="w-full max-w-5xl mx-auto">
         <ParticipantList participants={participants} onSelect={handleSelect} />
@@ -40,5 +45,4 @@ const SorteoPage = () => {
   );
 };
 
-export default SorteoPage;
-
+export default HomePage;
