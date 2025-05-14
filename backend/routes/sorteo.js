@@ -32,9 +32,9 @@ router.get('/:bombo', async (req, res) => {
 
 // POST /api/sorteo/asignar
 router.post('/asignar', async (req, res) => {
-  const { participantId, equipo } = req.body;
+  const { _id, equipo } = req.body;
 
-  if (!participantId || !equipo) {
+  if (!_id || !equipo) {
     return res.status(400).json({ error: 'Faltan datos: participantId o equipo.' });
   }
 

@@ -33,17 +33,31 @@ async function sortearDelBombo(bombo) {
  * Asigna un participante a un equipo (líder).
  */
 async function asignarAParticipante(participantId, equipo) {
-  const actualizado = await Participant.findOneAndUpdate(
-    { _id: participantId, equipo: null }, // Solo si aún no está asignado
-    { equipo },
-    { new: true }
-  );
+  const participante = await Participant.findById(participantId);
 
-  if (!actualizado) {
-    throw new Error('El participante ya fue asignado o no existe.');
+  if (!participante) {
+    throw new Error('Participante no encontrado.');
   }
 
-  return actualizado;
+  if (participante.equipo !== null) {
+    throw new Error('El participante ya fue asignado.');
+  }
+
+  // Verificar si ese equipo ya tiene un jugador de ese bombo
+  const yaAsignado = await Participant.findOne({
+    equipo,
+    bombo: participante.bombo
+  });
+
+  if (yaAsignado) {
+    throw new Error(`El equipo "${equipo}" ya tiene un jugador del bombo ${participante.bombo}.`);
+  }
+
+  // Asignar el jugador
+  participante.equipo = equipo;
+  await participante.save();
+
+  return participante;
 }
 
 
