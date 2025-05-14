@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
 const participantSchema = new mongoose.Schema({
-  nombre: { type: String, required: true },
+  nickname: { type: String, required: true },
+  user_tiktok: { type: String, required: true },
   foto_url: { type: String, required: true },
   bombo: { type: Number, required: true },
   equipo: { type: String, default: null }

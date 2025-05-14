@@ -13,6 +13,10 @@ app.use(express.json());      // Soporte para JSON en body
 const participantRoutes = require('./routes/participants');
 app.use('/api/participants', participantRoutes);
 
+const sorteoRoutes = require('./routes/sorteo');
+app.use('/api/sorteo', sorteoRoutes);
+
+
 // Conexión a MongoDB Atlas
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ Conectado a MongoDB Atlas'))
@@ -28,4 +32,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
 });
+
 
