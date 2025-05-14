@@ -32,9 +32,9 @@ router.get('/:bombo', async (req, res) => {
 
 // POST /api/sorteo/asignar
 router.post('/asignar', async (req, res) => {
-  const { _id, equipo } = req.body;
+  const { participantId, equipo } = req.body;
 
-  if (!_id || !equipo) {
+  if (!participantId || !equipo) {
     return res.status(400).json({ error: 'Faltan datos: participantId o equipo.' });
   }
 
@@ -45,6 +45,23 @@ router.post('/asignar', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+// GET /api/sorteo/equipo/:nickname
+router.get('/equipo/:nickname', async (req, res) => {
+  const nickname = req.params.nickname;
+  const equipo = `Equipo de ${nickname}`;
+
+  try {
+    const integrantes = await Participant.find({
+      equipo
+    });
+
+    res.json(integrantes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 // POST /api/sorteo/reiniciar
 router.post('/reiniciar', async (req, res) => {
