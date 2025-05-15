@@ -7,8 +7,9 @@ const {
   reiniciarEquipos
 } = require('../logic/sorteo');
 
-// GET /api/sorteo/equipos
-router.get('/equipos', async (req, res) => {
+// Rutas estáticas primero
+// Obtener todos los equipos formados
+router.get('/equipo', async (req, res) => {
   try {
     const equipos = await obtenerEquipos();
     res.json(equipos);
@@ -17,8 +18,21 @@ router.get('/equipos', async (req, res) => {
   }
 });
 
+// Obtener equipo de un líder por su nickname
+router.get('/equipo/:nickname', async (req, res) => {
+  const nickname = req.params.nickname;
+  const equipo = `Equipo de ${nickname}`;
 
-// GET /api/sorteo/:bombo
+  try {
+    const integrantes = await Participant.find({ equipo });
+    res.json(integrantes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Rutas dinámicas al final
+// Sorteo de participantes por bombo
 router.get('/:bombo', async (req, res) => {
   const bombo = parseInt(req.params.bombo);
 
@@ -30,7 +44,7 @@ router.get('/:bombo', async (req, res) => {
   }
 });
 
-// POST /api/sorteo/asignar
+// Asignar participante a un equipo
 router.post('/asignar', async (req, res) => {
   const { participantId, equipo } = req.body;
 
@@ -46,24 +60,7 @@ router.post('/asignar', async (req, res) => {
   }
 });
 
-// GET /api/sorteo/equipo/:nickname
-router.get('/equipo/:nickname', async (req, res) => {
-  const nickname = req.params.nickname;
-  const equipo = `Equipo de ${nickname}`;
-
-  try {
-    const integrantes = await Participant.find({
-      equipo
-    });
-
-    res.json(integrantes);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-
-// POST /api/sorteo/reiniciar
+// Reiniciar asignaciones
 router.post('/reiniciar', async (req, res) => {
   try {
     const cantidad = await reiniciarEquipos();
@@ -72,6 +69,5 @@ router.post('/reiniciar', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 module.exports = router;

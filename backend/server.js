@@ -6,8 +6,25 @@ require('dotenv').config();
 // Crear la app
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:3000',   // React local
+  'http://localhost:5000',   // Servidor local de páginas HTML (ej. live-server)
+  'https://team-picker-backend.onrender.com/ver.html',
+  ''
+];
+
+
 // Middleware
-app.use(cors());              // Permite peticiones del frontend
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true); // Permitir peticiones sin origen (Postman, curl)
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `El CORS para ${origin} no está permitido.`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+}));            // Permite peticiones del frontend
 app.use(express.json());      // Soporte para JSON en body
 
 const participantRoutes = require('./routes/participants');

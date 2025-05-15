@@ -39,6 +39,7 @@
     "tailwindcss": "^4.1.7",
     "vite": "^6.3.5"
   },
+  "start": "node server.js",
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "eslint.config.js",
   "repository": {
