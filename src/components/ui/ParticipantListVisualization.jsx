@@ -1,24 +1,23 @@
 import React from 'react';
-import Card from './Card';  // Asegúrate de importar el Card
+import Card from './Card';
 
 const ParticipantListV = ({ participants }) => {
   return (
-    <Card className="w-full mx-0 p-2 bg-blue-900"> {/* Fondo azul oscuro para la tarjeta */}
-      {/* Grilla para los participantes: 11 por fila en pantallas grandes */}
+    <Card className="w-full mx-0 p-2 bg-blue">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-11 gap-1 justify-center">
         {participants.map((participant, index) => (
           <div
             key={index}
-            className="p-2 border rounded-lg bg-blue-800 text-center flex flex-col items-center justify-center w-28 h-16"  // Fondo azul oscuro
+            className="p-2 border rounded-lg bg-blue text-center flex flex-col items-center justify-center w-32 h-24"
           >
-            <div className="w-12 h-12 rounded-full overflow-hidden shadow-lg group-hover:ring-4 group-hover:ring-blue-500 group-hover:shadow-xl transition-all duration-300 ease-in-out">
+            <div className="w-20 h-20 rounded-full overflow-hidden shadow-lg group-hover:ring-4 group-hover:ring-purple-700 group-hover:shadow-xl transition-all duration-300 ease-in-out">
               <img
-                src={participant.foto}
-                alt={participant.nombre}
-                className="w-full h-full object-cover"
+                src={participant.foto_url}
+                alt={participant.nickname}
+                className="w-full h-full object-contain"
               />
             </div>
-            <p className="text-center text-xs mt-1 text-white">{participant.nombre}</p>
+            <p className="text-center text-sm mt-1 text-white">{participant.nickname}</p>
           </div>
         ))}
       </div>
@@ -27,6 +26,8 @@ const ParticipantListV = ({ participants }) => {
 };
 
 export default ParticipantListV;
+
+
 
 
 
