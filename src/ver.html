@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Participantes Registrados</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .filtros {
+      max-width: 600px;
+      margin: 0 auto 30px auto;
+      text-align: center;
+    }
+
+    select {
+      padding: 8px;
+      border-radius: 5px;
+      background-color: #1f1f1f;
+      color: white;
+      border: 1px solid #444;
+      font-size: 14px;
+    }
+
+    .contador {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      padding: 16px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 15px rgba(0, 255, 180, 0.3);
+    }
+
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .nickname {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .tiktok {
+      color: #aaa;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .bombo {
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #00ffc3;
+    }
+
+    button {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #e60000;
+    }
+
+    .nav-btn {
+      background-color: #00cc88;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    /* Modal personalizado */
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #00000088;
+      backdrop-filter: blur(3px);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #modal .contenido {
+      background: #1e1e1e;
+      padding: 20px 30px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 0 20px rgba(0,255,200,0.2);
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-weight: 500;
+      display: none;
+      z-index: 20;
+    }
+  </style>
+</head>
+<body>
+  <h1>Participantes Registrados</h1>
+
+  <div style="text-align: center;">
+    <a href="/cargar.html" class="nav-btn">Cargar nuevo participante</a>
+  </div>
+
+  <div class="filtros">
+    <label for="filtro">Filtrar por bombo: </label>
+    <select id="filtro">
+      <option value="todos">Todos</option>
+      <option value="1">Streamer</option>
+      <option value="2">Mundialero</option>
+      <option value="3">Seguidor</option>
+      <option value="4">Seguidora</option>
+    </select>
+    <div class="contador" id="contador"></div>
+  </div>
+
+  <div class="grid" id="contenedor"></div>
+
+  <!-- Modal personalizado -->
+  <div id="modal">
+    <div class="contenido">
+      <p>¿Estás seguro de eliminar este participante?</p>
+      <button id="confirmarBtn">Sí, eliminar</button>
+      <button onclick="cerrarModal()" style="background:#444; margin-left:10px;">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Toast de éxito -->
+  <div id="toast">Participante eliminado correctamente</div>
+
+  <script>
+
+    if (localStorage.getItem("clave_admin") !== "dtyxsn3x8dtyxsn3x8") {
+        window.location.href = "/login.html";
+    }
+    const contenedor = document.getElementById('contenedor');
+    const filtro = document.getElementById('filtro');
+    const contador = document.getElementById('contador');
+    let todos = [];
+
+    function obtenerNombreBombo(num) {
+      return {
+        1: 'Streamer',
+        2: 'Mundialero',
+        3: 'Seguidor',
+        4: 'Seguidora'
+      }[num] || 'Desconocido';
+    }
+
+    async function cargarParticipantes() {
+      const res = await fetch('/admin/listar', {
+        headers: { 'x-clave-admin': 'dtyxsn3x8dtyxsn3x8' }
+      });
+      todos = await res.json();
+      mostrarFiltrados();
+    }
+
+    function mostrarFiltrados() {
+      const valor = filtro.value;
+      const filtrados = valor === 'todos' ? todos : todos.filter(p => String(p.bombo) === valor);
+
+      contenedor.innerHTML = '';
+      contador.textContent = `Mostrando ${filtrados.length} participante(s)`;
+
+      filtrados.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+          <img src="${p.foto_url}" alt="Foto de ${p.nickname}" />
+          <div class="nickname">${p.nickname}</div>
+          <div class="tiktok">@${p.user_tiktok}</div>
+          <div class="bombo">${obtenerNombreBombo(p.bombo)}</div>
+          <button onclick="eliminar('${p._id}')">Eliminar</button>
+        `;
+        contenedor.appendChild(div);
+      });
+    }
+
+    filtro.addEventListener('change', mostrarFiltrados);
+
+    // Modal eliminar
+    let idAEliminar = null;
+    function eliminar(id) {
+      idAEliminar = id;
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function cerrarModal() {
+      document.getElementById("modal").style.display = "none";
+      idAEliminar = null;
+    }
+
+    document.getElementById("confirmarBtn").addEventListener("click", async () => {
+      if (!idAEliminar) return;
+      const res = await fetch('/admin/eliminar/' + idAEliminar, {
+        method: 'DELETE',
+        headers: { 'x-clave-admin': 'dtyxsn3x8dtyxsn3x8' }
+      });
+      const data = await res.json();
+      cerrarModal();
+      mostrarToast(data.mensaje || data.error || "Participante eliminado");
+      cargarParticipantes();
+    });
+
+    function mostrarToast(texto) {
+      const toast = document.getElementById("toast");
+      toast.textContent = texto;
+      toast.style.display = "block";
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 2500);
+    }
+
+    cargarParticipantes();
+  </script>
+</body>
+</html>

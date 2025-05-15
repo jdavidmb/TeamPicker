@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cargar Participante</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #121212;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .form-container {
+      background: linear-gradient(#212121, #212121) padding-box,
+        linear-gradient(120deg, transparent 25%, #1cb0ff, #40ff99) border-box;
+      border: 2px solid transparent;
+      padding: 32px 24px;
+      font-size: 14px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      border-radius: 16px;
+      width: 360px;
+      position: relative;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .heading {
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .form-group {
+      position: relative;
+      width: 100%;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      font-size: 15px;
+      padding: 12px 10px;
+      background-color: transparent;
+      border: 1px solid #414141;
+      border-radius: 5px;
+      color: white;
+      outline: none;
+    }
+
+    .form-group label {
+      position: absolute;
+      left: 10px;
+      top: 12px;
+      background: #212121;
+      padding: 0 4px;
+      color: #999;
+      font-size: 14px;
+      pointer-events: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus + label,
+    .form-input:not(:placeholder-shown) + label,
+    .form-select:focus + label,
+    .form-select:not([value=""]) + label {
+      top: -10px;
+      left: 8px;
+      font-size: 11px;
+      color: #40ff99;
+    }
+
+    select.form-select option {
+      background-color: #212121;
+      color: white;
+    }
+
+    .custum-file-upload {
+      height: auto;
+      min-height: 180px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed #e8e8e8;
+      background-color: #212121;
+      padding: 1.2rem;
+      border-radius: 10px;
+      text-align: center;
+      transition: background 0.3s;
+    }
+
+    .custum-file-upload:hover {
+      background-color: #2a2a2a;
+    }
+
+    .custum-file-upload input {
+      display: none;
+    }
+
+    .custum-file-upload .icon svg {
+      height: 55px;
+      fill: #e8e8e8;
+    }
+
+    .custum-file-upload span {
+      font-weight: 400;
+      color: #e8e8e8;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    #preview {
+      margin-top: 10px;
+      max-width: 100%;
+      max-height: 140px;
+      border-radius: 8px;
+    }
+
+    button {
+      border-radius: 5px;
+      padding: 12px;
+      background: #ffffff14;
+      color: #e0e0e0;
+      border: 1px solid #414141;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #1c1c1c;
+      cursor: pointer;
+    }
+
+    .snackbar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #1cb0ff;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+    }
+
+    .snackbar.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <form class="form" id="form" enctype="multipart/form-data">
+      <span class="heading">Cargar Participante</span>
+
+      <div style="text-align: center; margin-top: -10px;">
+        <a href="/ver.html" style="color: white; text-decoration: none;">
+           <button type="button" style="background-color: #00cc88; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: bold;">
+            Ver participantes
+           </button>
+        </a>
+      </div>
+
+      <div class="form-group">
+        <input class="form-input" name="nickname" required type="text" placeholder=" " autocomplete="off" />
+        <label>Nickname</label>
+      </div>
+
+      <div class="form-group">
+        <input class="form-input" name="user_tiktok" required type="text" placeholder=" " autocomplete="off" />
+        <label>Usuario TikTok</label>
+      </div>
+
+      <div class="form-group">
+        <select name="bombo" required class="form-select" placeholder=" ">
+          <option value="" disabled selected></option>
+          <option value="1">Streamer</option>
+          <option value="2">Mundialero</option>
+          <option value="3">Seguidor</option>
+          <option value="4">Seguidora</option>
+        </select>
+        <label>Bombo</label>
+      </div>
+
+      <label for="file" class="custum-file-upload" id="uploadBox">
+        <div class="icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z" />
+          </svg>
+        </div>
+        <span id="uploadText">Click para subir imagen</span>
+        <input id="file" type="file" name="foto" accept="image/*" required />
+        <img id="preview" src="" alt="" style="display:none;" />
+      </label>
+
+      <button type="submit">Cargar</button>
+    </form>
+  </div>
+
+  <div class="snackbar" id="snackbar">Participante guardado correctamente</div>
+
+  <script>
+
+    if (localStorage.getItem("clave_admin") !== "dtyxsn3x8dtyxsn3x8") {
+        window.location.href = "/login.html";
+    }
+
+    const form = document.getElementById('form');
+    const fileInput = document.getElementById('file');
+    const uploadText = document.getElementById('uploadText');
+    const preview = document.getElementById('preview');
+    const snackbar = document.getElementById('snackbar');
+
+    fileInput.addEventListener('change', function () {
+      if (this.files && this.files[0]) {
+        uploadText.textContent = 'Imagen cargada: ' + this.files[0].name;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(this.files[0]);
+      } else {
+        uploadText.textContent = 'Click para subir imagen';
+        preview.style.display = 'none';
+      }
+    });
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+
+      const res = await fetch('/admin/crear', {
+        method: 'POST',
+        headers: {
+          'x-clave-admin': 'dtyxsn3x8dtyxsn3x8'
+        },
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (data.mensaje) {
+        showSnackbar(data.mensaje);
+        form.reset();
+        preview.style.display = 'none';
+        uploadText.textContent = 'Click para subir imagen';
+      } else {
+        showSnackbar(data.error || 'Ocurrió un error');
+      }
+    });
+
+    function showSnackbar(message) {
+      snackbar.textContent = message;
+      snackbar.classList.add('show');
+      setTimeout(() => snackbar.classList.remove('show'), 3000);
+    }
+  </script>
+</body>
+</html>
