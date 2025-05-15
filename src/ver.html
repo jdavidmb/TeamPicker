@@ -40,13 +40,21 @@
       color: #aaa;
     }
 
+    /* ✅ CAMBIO APLICADO AQUÍ */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
+      justify-items: center;
+      align-items: start;
+      padding: 20px;
+      min-height: 60vh;
+      justify-content: center; /* Centra tarjetas cuando hay pocas */
     }
 
     .card {
+      width: 100%;
+      max-width: 300px;
       background: #1e1e1e;
       border: 1px solid #2a2a2a;
       padding: 16px;
@@ -61,11 +69,12 @@
     }
 
     .card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 10px;
+    width: 100%;
+    height: 240px; /* aumentamos la altura */
+    object-fit: cover; /* puedes cambiar a 'contain' si prefieres sin recorte */
+    border-radius: 6px;
+    margin-bottom: 10px;
+    background-color: #121212; /* por si usas contain y sobra espacio */
     }
 
     .nickname {
@@ -182,10 +191,10 @@
   <div id="toast">Participante eliminado correctamente</div>
 
   <script>
-
     if (localStorage.getItem("clave_admin") !== "dtyxsn3x8dtyxsn3x8") {
-        window.location.href = "/login.html";
+      window.location.href = "/login.html";
     }
+
     const contenedor = document.getElementById('contenedor');
     const filtro = document.getElementById('filtro');
     const contador = document.getElementById('contador');
