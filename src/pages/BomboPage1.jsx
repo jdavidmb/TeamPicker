@@ -1,66 +1,79 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import ParticipantListV from '../components/ui/ParticipantListVisualization';
 
 const BomboPage1 = () => {
-  const { nombre } = useParams();
+  const [participants, setParticipants] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [randomParticipants, setRandomParticipants] = useState(
-    Array(3).fill({ id: null, nombre: '', foto: '' }) // Inicialmente en blanco
-  );
+  const [randomParticipants, setRandomParticipants] = useState([]);
 
-  // Generación de participantes
-  const participants = Array.from({ length: 25 }, (_, i) => ({
-    id: i + 1,
-    nombre: `Participante ${i + 1}`,
-    foto: `https://via.placeholder.com/50`,
-  }));
+  // Cargar participantes del bombo Mundialero (bombo = 1)
+  useEffect(() => {
+    fetch('http://localhost:5000/api/participants/bombo/2')
+      .then(res => res.json())
+      .then(data => {
+        setParticipants(data);
+        const shuffled = data.sort(() => 0.5 - Math.random());
+        setRandomParticipants(shuffled.slice(0, 3));
+      })
+      .catch(err => console.error('Error fetching participants:', err));
+  }, []);
 
-  // Generar 3 participantes aleatorios
   const generateRandomParticipants = () => {
     const shuffled = [...participants].sort(() => 0.5 - Math.random());
     setRandomParticipants(shuffled.slice(0, 3));
-    setSelected(null); // Reiniciar el seleccionado al sortear
+    setSelected(null);
   };
 
-  // Manejar el evento del botón "Continuar formando el equipo"
   const handleContinue = () => {
     console.log('Continuar formando el equipo con:', selected);
-    // Aquí puedes añadir la lógica que necesites para continuar
   };
 
   return (
-    <div className="p-4 min-h-screen bg-gradient-to-t from-black via-indigo-900 to-purple-800">
-      <h2 className="text-xl font-bold mb-4 text-center text-white text-shadow-lg">Sorteo de Equipos</h2>
+    <div
+      className="p-4 min-h-screen"
+      style={{
+        background: 'linear-gradient(135deg, #000000, #0b1a4d, #2a0048)',
+        fontFamily: "'Orbitron', sans-serif",
+        color: 'white',
+        textAlign: 'center',
+      }}
+    >
+      <h2
+        className="text-2xl font-bold mb-4"
+        style={{
+          textShadow: `0 0 4px #003366, 0 0 8px #003366, 0 0 12px #004080, 0 0 16px #004080, 0 0 20px #0059b3, 0 0 24px #0059b3, 0 0 28px #0073e6`,
+        }}
+      >
+        Sorteo de Equipos: Mundialero
+      </h2>
 
-      {/* Tarjetas de selección de participantes y participante seleccionado */}
       <div className="flex justify-center gap-6 mb-4">
-        {/* Tarjeta de selección con el botón de sorteo */}
         <Card
           title="Selecciona un participante"
-          className="max-w-sm bg-gradient-to-t from-black via-indigo-800 to-purple-900 border-4 border-silver-500 shadow-xl hover:shadow-2xl"
+          className="max-w-sm border-4 border-gray-500 shadow-lg"
         >
           <div className="grid grid-cols-3 gap-3">
             {randomParticipants.map((participant, index) => (
               <div
                 key={index}
-                className={`p-2 border-4 rounded-lg cursor-pointer w-24 h-24 flex flex-col items-center justify-center transition duration-300 ease-in-out transform ${
-                  selected?.id === participant.id
-                    ? 'bg-gradient-to-t from-blue-700 via-indigo-600 to-purple-600 transform scale-105 border-silver-500'
-                    : 'bg-gradient-to-t from-black via-gray-800 to-indigo-900 border-silver-500'
-                }`}
-                onClick={() => participant.id && setSelected(participant)}
+                className={`p-2 border-4 rounded-lg cursor-pointer w-24 h-24 flex flex-col items-center justify-center transition-transform duration-300 transform ${
+                  selected?.id === participant._id
+                    ? 'bg-gradient-to-t from-blue-900 via-gray-800 to-gray-700 border-blue-500'
+                    : 'bg-gradient-to-t from-gray-800 via-gray-700 to-gray-600 border-gray-500'
+                } hover:bg-gradient-to-t hover:from-blue-800 hover:via-gray-700 hover:to-gray-600 hover:scale-105`}
+                onClick={() => participant._id && setSelected(participant)}
               >
-                {participant.id ? (
+                {participant._id ? (
                   <>
                     <img
-                      src={participant.foto}
-                      alt={participant.nombre}
-                      className="w-12 h-12 rounded-full border-4 border-silver-500"
+                      src={participant.foto_url}
+                      alt={participant.nickname}
+                      className="w-12 h-12 rounded-full border-2 border-gray-500"
                     />
-                    <p className="text-center text-xs mt-2 text-white">{participant.nombre}</p>
+                    <p className="text-xs mt-2">{participant.nickname}</p>
                   </>
                 ) : (
                   <div className="w-12 h-12 bg-gray-600 rounded-full"></div>
@@ -68,46 +81,33 @@ const BomboPage1 = () => {
               </div>
             ))}
           </div>
-
-          {/* Botón de sorteo dentro de la tarjeta */}
           <div className="flex justify-center mt-3">
-            <Button
-              onClick={generateRandomParticipants}
-              className="px-3 py-2 bg-gradient-to-t from-blue-800 to-indigo-800 text-white font-semibold rounded-lg hover:from-blue-900 hover:to-indigo-900 transition duration-300 shadow-xl"
-            >
-              Sortear
-            </Button>
+            <Button onClick={generateRandomParticipants}>Sortear</Button>
           </div>
         </Card>
 
-        {/* Participante seleccionado a la derecha */}
         {selected && (
           <Card
             title="Participante Seleccionado"
-            className="max-w-sm bg-gradient-to-t from-black via-indigo-800 to-purple-900 border-4 border-silver-500 shadow-xl hover:shadow-2xl"
+            className="max-w-sm border-4 border-gray-500 shadow-lg"
           >
-            <div className="text-center">
+            <div>
               <img
-                src={selected.foto}
-                alt={selected.nombre}
-                className="w-16 h-16 mx-auto rounded-full mt-2 border-4 border-silver-500"
+                src={selected.foto_url}
+                alt={selected.nickname}
+                className="w-16 h-16 mx-auto rounded-full border-2 border-blue-500"
               />
-              <p className="text-lg mt-2 text-white">{selected.nombre}</p>
-              <div className="flex justify-center mt-3">
-                <Button
-                  onClick={handleContinue}
-                  className="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition duration-300 shadow-xl"
-                >
-                  Continuar formando el equipo
-                </Button>
-              </div>
+              <p className="text-lg mt-2">{selected.nickname}</p>
+              <Button onClick={handleContinue} className="mt-3">
+                Continuar formando el equipo
+              </Button>
             </div>
           </Card>
         )}
       </div>
 
-      {/* Lista completa de participantes (solo visualización) */}
-      <div className="w-full max-w-7xl mx-auto mt-3 bg-blue-800 p-4">
+      <div className="mt-8">
+        <h3 className="text-xl font-bold mb-2">Participantes Mundialeros</h3>
         <ParticipantListV participants={participants} />
       </div>
     </div>
@@ -115,4 +115,3 @@ const BomboPage1 = () => {
 };
 
 export default BomboPage1;
-
