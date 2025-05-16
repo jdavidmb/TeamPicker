@@ -14,7 +14,7 @@ const ParticipantListV = ({ participants }) => {
               <img
                 src={participant.foto_url}
                 alt={participant.nickname}
-                className="w-full h-full rounded-full object-cover"
+                className={`w-full h-full rounded-full object-cover ${participant.equipo ? 'grayscale' : ''}`}
               />
             </div>
             <p className="text-center text-sm mt-1 text-white">{participant.nickname}</p>
@@ -26,6 +26,7 @@ const ParticipantListV = ({ participants }) => {
 };
 
 export default ParticipantListV;
+
 
 
 

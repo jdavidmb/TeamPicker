@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Participant = require('../models/Participant');
 const {
   sortearDelBombo,
   asignarAParticipante,
@@ -18,11 +19,9 @@ router.get('/equipo', async (req, res) => {
   }
 });
 
-// Obtener equipo de un líder por su nickname
-router.get('/equipo/:nickname', async (req, res) => {
-  const nickname = req.params.nickname;
-  const equipo = `Equipo de ${nickname}`;
-
+router.get('/equipo/:equipo', async (req, res) => {
+  const equipo = req.params.equipo;
+  console.log('-------------')
   try {
     const integrantes = await Participant.find({ equipo });
     res.json(integrantes);
@@ -30,6 +29,7 @@ router.get('/equipo/:nickname', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // Rutas dinámicas al final
 // Sorteo de participantes por bombo
@@ -46,14 +46,14 @@ router.get('/:bombo', async (req, res) => {
 
 // Asignar participante a un equipo
 router.post('/asignar', async (req, res) => {
-  const { participantId, equipo } = req.body;
+  const { _id, equipo } = req.body;
 
-  if (!participantId || !equipo) {
+  if (!_id || !equipo) {
     return res.status(400).json({ error: 'Faltan datos: participantId o equipo.' });
   }
 
   try {
-    const asignado = await asignarAParticipante(participantId, equipo);
+    const asignado = await asignarAParticipante(_id, equipo);
     res.json(asignado);
   } catch (err) {
     res.status(400).json({ error: err.message });

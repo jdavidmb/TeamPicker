@@ -14,9 +14,9 @@ router.get('/', async (req, res) => {
 
 // POST /api/participants - agregar un nuevo participante
 router.post('/', async (req, res) => {
-  const { nickname, user_tiktok, foto_url, bombo } = req.body;
+    const { nickname, user_tiktok, foto_url, bombo } = req.body;
   try {
-    const nuevo = new Participant({ nickname, user_tiktok, foto_url, bombo });
+       const nuevo = new Participant({ nickname, user_tiktok, foto_url, bombo });
     await nuevo.save();
     res.status(201).json(nuevo);
   } catch (err) {
@@ -51,5 +51,3 @@ router.post('/', async (req, res) => {
 // });
 
 module.exports = router;
-
-

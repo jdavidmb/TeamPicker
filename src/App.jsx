@@ -9,9 +9,9 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/bombo1/:nombre" element={<BomboPage1 />} />
-      <Route path="/bombo2" element={<BomboPage2 />} />
-      <Route path="/bombo3" element={<BomboPage3 />} />
+      <Route path="/bombo1/:nickname" element={<BomboPage1 />} />
+      <Route path="/bombo2/:equipo" element={<BomboPage2 />} />
+      <Route path="/bombo3/:equipo" element={<BomboPage3 />} />
       <Route path="/equipos" element={<EquiposPage />} />
     </Routes>
   );
