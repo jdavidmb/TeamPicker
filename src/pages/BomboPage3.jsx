@@ -56,7 +56,8 @@ const BomboPage3 = () => {
               .then(response => {
                 if (response.ok) {
                   setMessage('Participante añadido exitosamente');
-                  
+                  setTimeout(() => navigate('/equipos'));  // Ajusta la ruta si usas otra
+
                 } else {
                   setMessage('Error al añadir participante');
                 }
