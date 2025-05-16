@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import ParticipantListV from '../components/ui/ParticipantListVisualization';
@@ -9,13 +8,17 @@ const BomboPage1 = () => {
   const [selected, setSelected] = useState(null);
   const [randomParticipants, setRandomParticipants] = useState([]);
 
-  // Cargar participantes del bombo Mundialero (bombo = 1)
+  // Cargar participantes del bombo 1
   useEffect(() => {
-    fetch('http://localhost:5000/api/participants/bombo/2')
+    fetch('http://localhost:5000/api/participants')
       .then(res => res.json())
       .then(data => {
-        setParticipants(data);
-        const shuffled = data.sort(() => 0.5 - Math.random());
+        // Filtrar solo los participantes del bombo 1
+        const bombo1Participants = data.filter(participant => participant.bombo === 1);
+        setParticipants(bombo1Participants);
+
+        // Mezclar aleatoriamente los participantes
+        const shuffled = bombo1Participants.sort(() => 0.5 - Math.random());
         setRandomParticipants(shuffled.slice(0, 3));
       })
       .catch(err => console.error('Error fetching participants:', err));
