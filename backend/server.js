@@ -14,16 +14,16 @@ const allowedOrigins = [
 ];
 
 // Middleware
-app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin) return callback(null, true); // Permitir peticiones sin origen (Postman, curl)
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `El CORS para ${origin} no está permitido.`;
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  }
-}));            // Permite peticiones del frontend
+app.use(cors());
+//   origin: function(origin, callback) {
+//     if (!origin) return callback(null, true); // Permitir peticiones sin origen (Postman, curl)
+//     if (allowedOrigins.indexOf(origin) === -1) {
+//       const msg = `El CORS para ${origin} no está permitido.`;
+//       return callback(new Error(msg), false);
+//     }
+//     return callback(null, true);
+//   }
+// }));            // Permite peticiones del frontend
 app.use(express.json());      // Soporte para JSON en body
 
 const participantRoutes = require('./routes/participants');
