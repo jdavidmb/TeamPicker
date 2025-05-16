@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import ParticipantListV from '../components/ui/ParticipantListVisualization';
+import { useNavigate } from 'react-router-dom';
 import Card from '../components/ui/Card';
+import Button from '../components/ui/Button';
+import { motion } from 'framer-motion';
 
 const EquiposPage = () => {
   const [participants, setParticipants] = useState([]);
   const [teams, setTeams] = useState({});
   const [selectedTeam, setSelectedTeam] = useState('all');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:5000/api/participants')
@@ -14,7 +17,6 @@ const EquiposPage = () => {
       .then(data => {
         setParticipants(data);
 
-        // Agrupar participantes por equipo o "Sin equipo"
         const grouped = data.reduce((acc, p) => {
           const teamName = p.equipo || 'Sin equipo';
           if (!acc[teamName]) acc[teamName] = [];
@@ -30,25 +32,28 @@ const EquiposPage = () => {
       });
   }, []);
 
-  // Opciones de filtro, incluye "all" para mostrar todos
   const teamOptions = ['all', ...Object.keys(teams)];
-
-  // Equipos filtrados según selección
   const filteredTeams = selectedTeam === 'all' ? teams : { [selectedTeam]: teams[selectedTeam] || [] };
 
   return (
-    <div className="p-4 min-h-screen bg-gradient-to-tr from-black via-indigo-900 to-purple-900 text-white">
-      <h2 className="text-2xl font-bold mb-4 text-center">Equipos y Participantes</h2>
+    <div className="p-6 min-h-screen bg-gradient-to-tr from-black via-indigo-900 to-purple-900 text-white font-sans">
+      <h2 className="text-4xl font-extrabold mb-8 text-center drop-shadow-lg">
+        Equipos y Participantes
+      </h2>
 
-      {message && (
-        <p className="text-lg text-yellow-300 font-semibold mb-4">{message}</p>
-      )}
-
-      <div className="mb-4 flex justify-center">
-        <label htmlFor="teamFilter" className="mr-2 mt-1 font-semibold text-white">Filtrar por equipo:</label>
+      <motion.div 
+        className="max-w-lg mx-auto mb-8 p-6 rounded-xl bg-gradient-to-r from-indigo-700 via-purple-800 to-pink-700 shadow-xl flex flex-col items-center"
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <label htmlFor="teamFilter" className="mb-3 text-xl font-semibold tracking-wide select-none">
+          Filtrar por equipo
+        </label>
         <select
           id="teamFilter"
-          className="p-2 rounded text-black"
+          className="w-full p-3 rounded-lg text-black font-medium cursor-pointer
+            focus:outline-none focus:ring-4 focus:ring-purple-400 transition-shadow"
           value={selectedTeam}
           onChange={e => setSelectedTeam(e.target.value)}
         >
@@ -58,29 +63,41 @@ const EquiposPage = () => {
             </option>
           ))}
         </select>
-      </div>
 
-      {Object.keys(filteredTeams).length === 0 && <p className="text-center">No hay participantes para mostrar.</p>}
+        <Button
+          onClick={() => navigate('/')}
+          className="mt-6 bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-full shadow-lg uppercase tracking-wider transition-colors"
+        >
+          Formar nuevo equipo
+        </Button>
+      </motion.div>
 
-      {Object.entries(filteredTeams).map(([teamName, members]) => (
-        <Card key={teamName} title={`Equipo: ${teamName}`}>
-          <div className="flex flex-wrap gap-4 mt-2 justify-center">
-            {members.map(member => (
-              <div key={member._id} className="flex flex-col items-center w-24">
-                <img
-                  src={member.foto_url}
-                  alt={member.nickname}
-                  className="w-16 h-16 rounded-full object-cover"
-                />
-                <p className="text-sm mt-1 text-center">{member.nickname}</p>
-              </div>
-            ))}
-          </div>
-        </Card>
-      ))}
+      {message && (
+        <p className="text-yellow-400 text-center mb-6 font-semibold">{message}</p>
+      )}
+
+      {Object.keys(filteredTeams).length === 0 ? (
+        <p className="text-center text-gray-300">No hay participantes para mostrar.</p>
+      ) : (
+        Object.entries(filteredTeams).map(([teamName, members]) => (
+          <Card key={teamName} title={`Equipo: ${teamName}`} className="mb-8 max-w-5xl mx-auto">
+            <div className="flex flex-wrap gap-6 justify-center">
+              {members.map(member => (
+                <div key={member._id} className="flex flex-col items-center w-28">
+                  <img
+                    src={member.foto_url}
+                    alt={member.nickname}
+                    className="w-20 h-20 rounded-full object-cover border-4 border-purple-600 shadow-lg"
+                  />
+                  <p className="mt-3 text-white font-semibold text-center truncate max-w-full">{member.nickname}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
+        ))
+      )}
     </div>
   );
 };
 
 export default EquiposPage;
-
