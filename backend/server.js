@@ -10,7 +10,7 @@ const allowedOrigins = [
   'http://localhost:3000',   // React local
   'http://localhost:5000',   // Servidor local de páginas HTML (ej. live-server)
   'https://team-picker-backend.onrender.com/ver.html',
-  ''
+  'https://team-picker-act.vercel.app/'
 ];
 
 // Middleware
