@@ -5,14 +5,13 @@ require('dotenv').config();
 
 // Crear la app
 const app = express();
-
 const allowedOrigins = [
+  'http://localhost:5173',
   'http://localhost:3000',   // React local
   'http://localhost:5000',   // Servidor local de páginas HTML (ej. live-server)
   'https://team-picker-backend.onrender.com/ver.html',
   ''
 ];
-
 
 // Middleware
 app.use(cors({

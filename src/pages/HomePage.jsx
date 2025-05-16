@@ -84,7 +84,7 @@ const HomePage = () => {
       <Card className="max-w-2xl w-full mb-2 border-4 border-gray-700 shadow-xl p-6">
         {selected ? (
           <div className="flex flex-col items-center gap-3">
-            <img src={selected.foto_url} alt={selected.nickname} className="w-28 h-28 rounded-full border-4 border-blue-600 shadow-lg" />
+            <img src={selected.foto_url} alt={selected.nickname} className="w-28 h-28 rounded-full border-4 border-blue-600 shadow-lg object-cover" />
             <p className="text-3xl font-bold mt-2">{selected.nickname}</p>
             <Button onClick={handleCreateTeam} className="bg-blue-600 text-white px-4 py-2 rounded-lg">Crear equipo</Button>
             {teamCreated && (

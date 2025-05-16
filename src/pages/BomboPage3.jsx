@@ -4,7 +4,7 @@ import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import ParticipantListV from '../components/ui/ParticipantListVisualization';
 
-const BomboPage2 = () => {
+const BomboPage3 = () => {
   const [participants, setParticipants] = useState([]);
   const [selected, setSelected] = useState(null);
   const [randomParticipants, setRandomParticipants] = useState([]);
@@ -80,7 +80,7 @@ const BomboPage2 = () => {
       {message && <p className="text-lg text-yellow-300 font-semibold mb-4">{message}</p>}
 
       <div className="flex justify-center gap-6 mb-4">
-        <Card title="Selecciona un participante" className="max-w-sm border-4 border-gray-500 shadow-lg">
+        <Card title="Selecciona un participante" className="max-w-sm border-4 border-gray-500 shadow-lg object-cover">
           <div className="grid grid-cols-3 gap-3">
             {randomParticipants.map((participant, index) => (
               <div
@@ -91,7 +91,7 @@ const BomboPage2 = () => {
                 <img
                   src={participant.foto_url}
                   alt={participant.nickname}
-                  className={`w-12 h-12 rounded-full border-2 border-gray-500 ${participant.equipo ? 'grayscale' : ''}`}
+                  className={`w-12 h-12 rounded-full border-2 border-gray-500 object-cover ${participant.equipo ? 'grayscale' : ''}`}
                 />
                 <p className="text-xs mt-2">{participant.nickname}</p>
               </div>
@@ -105,7 +105,7 @@ const BomboPage2 = () => {
         {selected && (
           <Card title="Participante Seleccionado" className="max-w-sm border-4 border-gray-500 shadow-lg">
             <div>
-              <img src={selected.foto_url} alt={selected.nickname} className="w-16 h-16 mx-auto rounded-full border-2 border-blue-500" />
+              <img src={selected.foto_url} alt={selected.nickname} className="w-16 h-16 mx-auto rounded-full border-2 border-blue-500 object-cover" />
               <p className="text-lg mt-2">{selected.nickname}</p>
               <Button onClick={handleContinue} className="mt-3">Finalizar conformación de equipo</Button>
             </div>
@@ -120,4 +120,4 @@ const BomboPage2 = () => {
   );
 };
 
-export default BomboPage2;
+export default BomboPage3;

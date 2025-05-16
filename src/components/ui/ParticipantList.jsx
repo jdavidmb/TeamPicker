@@ -13,7 +13,7 @@ const ParticipantList = ({ participants, onSelect }) => {
 
   return (
     <Card className="w-full max-w-screen-xl mx-auto p-4 bg-gradient-to-t from-black via-indigo-900 to-purple-900 border border-gray-600 shadow-lg text-white">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-1">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-1">
         {participants.map((participant, index) => (
           <div
             key={index}
