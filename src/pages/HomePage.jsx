@@ -13,7 +13,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/participants')
+    fetch('https://team-picker-backend.onrender.com/api/participants')
       .then(res => res.json())
       .then(data => {
         const bombo1Participants = data.filter(p => p.bombo === 1);
@@ -102,3 +102,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+ 

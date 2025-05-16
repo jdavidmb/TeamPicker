@@ -9,21 +9,21 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',   // React local
   'http://localhost:5000',   // Servidor local de páginas HTML (ej. live-server)
-  'https://team-picker-backend.onrender.com/ver.html',
+  'https://team-picker-backend.onrender.com',
   'https://team-picker-act.vercel.app/'
 ];
 
 // Middleware
-app.use(cors());
-//   origin: function(origin, callback) {
-//     if (!origin) return callback(null, true); // Permitir peticiones sin origen (Postman, curl)
-//     if (allowedOrigins.indexOf(origin) === -1) {
-//       const msg = `El CORS para ${origin} no está permitido.`;
-//       return callback(new Error(msg), false);
-//     }
-//     return callback(null, true);
-//   }
-// }));            // Permite peticiones del frontend
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true); // Permitir peticiones sin origen (Postman, curl)
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `El CORS para ${origin} no está permitido.`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+}));            // Permite peticiones del frontend
 app.use(express.json());      // Soporte para JSON en body
 
 const participantRoutes = require('./routes/participants');
