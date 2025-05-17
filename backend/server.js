@@ -32,6 +32,10 @@ app.use('/api/participants', participantRoutes);
 const sorteoRoutes = require('./routes/sorteo');
 app.use('/api/sorteo', sorteoRoutes);
 
+const adminRoutes = require('./routes/admin');
+app.use('/api/admin', adminRoutes);
+
+
 
 // Conexión a MongoDB Atlas
 mongoose.connect(process.env.MONGODB_URI)

@@ -81,7 +81,7 @@
       const ingresada = inputClave.value.trim();
       if (ingresada === CLAVE_ESPERADA) {
         localStorage.setItem("clave_admin", ingresada);
-        window.location.href = "/cargar.html"; // Página para cargar datos
+        window.location.href = "/src/cargar.html"; // Página para cargar datos
       } else {
         divError.textContent = "Clave incorrecta";
       }
