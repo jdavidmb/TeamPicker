@@ -167,7 +167,7 @@
   <h1>Participantes Registrados</h1>
 
   <div style="text-align: center;">
-    <a href="/src/cargar.html" class="nav-btn-inicio">Cargar nuevo participante</a>
+    <a href="/cargar.html" class="nav-btn-inicio">Cargar nuevo participante</a>
   </div>
 
   <div class="filtros">
@@ -198,7 +198,7 @@
 
   <script>
     if (localStorage.getItem("clave_admin") !== "dtyxsn3x8dtyxsn3x8") {
-      window.location.href = "/src/login.html";
+      window.location.href = "/login.html";
     }
 
     const contenedor = document.getElementById('contenedor');
@@ -216,7 +216,7 @@
     }
 
     async function cargarParticipantes() {
-      const res = await fetch('http://localhost:5000/api/admin/listar', {
+      const res = await fetch('https://team-picker-backend-22eo.onrender.com/api/admin/listar', {
         headers: { 'x-clave-admin': 'dtyxsn3x8dtyxsn3x8' }
       });
       todos = await res.json();
@@ -260,7 +260,7 @@
 
     document.getElementById("confirmarBtn").addEventListener("click", async () => {
       if (!idAEliminar) return;
-      const res = await fetch('http://localhost:5000/api/admin/eliminar/' + idAEliminar, {
+      const res = await fetch('https://team-picker-backend-22eo.onrender.com/api/admin/eliminar/' + idAEliminar, {
         method: 'DELETE',
         headers: { 'x-clave-admin': 'dtyxsn3x8dtyxsn3x8' }
       });
