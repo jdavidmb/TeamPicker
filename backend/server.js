@@ -9,8 +9,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',   // React local
   'http://localhost:5000',   // Servidor local de páginas HTML (ej. live-server)
-  'https://team-picker-backend.onrender.com',
-  'https://team-picker-act.vercel.app/'
+  'https://team-picker.onrender.com'
 ];
 
 // Middleware
@@ -31,11 +30,6 @@ app.use('/api/participants', participantRoutes);
 
 const sorteoRoutes = require('./routes/sorteo');
 app.use('/api/sorteo', sorteoRoutes);
-
-const adminRoutes = require('./routes/admin');
-app.use('/api/admin', adminRoutes);
-
-
 
 // Conexión a MongoDB Atlas
 mongoose.connect(process.env.MONGODB_URI)

@@ -3,7 +3,9 @@ import Button from '../components/ui/Button';
 import React, { useState, useEffect } from 'react';
 import Card from '../components/ui/Card';
 import ParticipantList from '../components/ui/ParticipantList';
-import { motion } from 'framer-motion';
+import { m, motion } from 'framer-motion';
+import * as Dialog from '@radix-ui/react-dialog';
+import "./css/modal-style.css";
 
 const HomePage = () => {
   const [participants, setParticipants] = useState([]);
@@ -13,7 +15,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/participants')
+    fetch(import.meta.env.VITE_APP_API_URL + '/api/participants')
       .then(res => res.json())
       .then(data => {
         const bombo1Participants = data.filter(p => p.bombo === 1);
@@ -39,7 +41,7 @@ const HomePage = () => {
     }
 
     try {
-      fetch('http://localhost:5000/api/sorteo/asignar', {
+      fetch(import.meta.env.VITE_APP_API_URL + '/api/sorteo/asignar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ _id: selected._id, equipo: selected.nickname }),
@@ -50,7 +52,6 @@ const HomePage = () => {
         })
         .then(result => {
           console.log('Equipo creado:', result);
-          setMessage('Equipo creado con éxito.');
           setTeamCreated(true);
           localStorage.setItem('equipo', selected.nickname);
         })
@@ -81,15 +82,42 @@ const HomePage = () => {
       <h2 className="text-4xl font-extrabold mb-8 text-center" style={{ textShadow: '0 0 6px #003366, 0 0 12px #003366' }}>
         Sorteo de Equipos: Streamers
       </h2>
+      <Button
+        onClick={() => navigate('/equipos')}
+        className="mt-6 bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-full shadow-lg uppercase tracking-wider transition-colors"
+        style={{ fontFamily: "'Orbitron', sans-serif"}}
+      >
+        Ver Equipos
+      </Button>
+      <div style={{ height: 10 }} />
       <Card className="max-w-2xl w-full mb-2 border-4 border-gray-700 shadow-xl p-6">
         {selected ? (
           <div className="flex flex-col items-center gap-3">
             <img src={selected.foto_url} alt={selected.nickname} className="w-28 h-28 rounded-full border-4 border-blue-600 shadow-lg object-cover" />
             <p className="text-3xl font-bold mt-2">{selected.nickname}</p>
-            <Button onClick={handleCreateTeam} className="bg-blue-600 text-white px-4 py-2 rounded-lg">Crear equipo</Button>
-            {teamCreated && (
-              <Button onClick={handleContinue} className="bg-green-600 text-white px-4 py-2 rounded-lg mt-2">Continuar ➡️</Button>
-            )}
+            <Dialog.Root modal={true} open={teamCreated}>
+              <Dialog.Trigger asChild>
+                <Button onClick={handleCreateTeam} className="bg-blue-600 text-white px-4 py-2 rounded-lg">Crear equipo</Button>
+              </Dialog.Trigger>
+              <Dialog.Portal>
+                <Dialog.Overlay className="DialogOverlay" />
+                <Dialog.Content className="DialogContent"
+                  onInteractOutside={(event) => event.preventDefault()}>
+                  <Dialog.Title className="DialogTitle"
+                    style={{ fontFamily: "'Orbitron', sans-serif" }}>Equipo creado con éxito.</Dialog.Title>
+                  <img src={selected.foto_url} alt={selected.nickname} className="w-28 h-28 rounded-full border-4 border-blue-600 shadow-lg object-cover" />
+                  <Dialog.Description className="text-3xl font-bold mt-2"
+                    style={{ fontFamily: "'Orbitron', sans-serif", marginBottom: '7px' }}>
+                    {selected.nickname}
+                  </Dialog.Description>
+                  <Dialog.Close asChild>
+                    <button onClick={handleContinue} className="bg-blue-600 text-white px-4 py-2 rounded-lg mt-2"
+                      style={{ fontFamily: "'Orbitron', sans-serif" }}
+                    >Continuar ➡️</button>
+                  </Dialog.Close>
+                </Dialog.Content>
+              </Dialog.Portal>
+            </Dialog.Root>
           </div>
         ) : (
           <p className="text-center">Selecciona un participante para crear el equipo.</p>
@@ -102,4 +130,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
- 
