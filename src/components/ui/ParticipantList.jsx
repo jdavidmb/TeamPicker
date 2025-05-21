@@ -22,13 +22,13 @@ const ParticipantList = ({ participants, onSelect }) => {
               ${participant.equipo !== null ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
           >
             <div
-              className={`w-20 h-20 mx-auto rounded-full overflow-hidden shadow-lg transition-all duration-300 ease-in-out 
-                ${selected === participant.nickname ? 'ring-4 ring-blue-500' : ''}`}
+              className={`w-20 h-20 mx-auto overflow-hidden shadow-lg transition-all duration-300 ease-in-out 
+                ${selected === participant.nickname ? 'ring-4 ring-blue-500 shadow-blue-500/50 scale-110' : ''} rounded-full`}
             >
               <img
                 src={participant.foto_url}
                 alt={participant.nickname}
-                className={`w-full h-full object-cover ${participant.equipo !== null ? 'grayscale' : ''}`}
+                className={`w-full h-full object-cover ${participant.equipo !== null ? 'grayscale' : ''} rounded-full`}
               />
             </div>
             <p className="text-center text-sm mt-1 font-orbitron text-white">{participant.nickname}</p>

@@ -84,7 +84,6 @@ const HomePage = () => {
       </h2>
       <Button
         onClick={() => navigate('/equipos')}
-        className="mt-6 bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-full shadow-lg uppercase tracking-wider transition-colors"
         style={{ fontFamily: "'Orbitron', sans-serif"}}
       >
         Ver Equipos
