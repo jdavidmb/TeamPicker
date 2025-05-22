@@ -3,13 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import { motion } from 'framer-motion';
-import TrashButton from '../components/ui/TrashButton'; // Agrega este import
+import TrashButton from '../components/ui/TrashButton';
+import * as Dialog from '@radix-ui/react-dialog';
 
 const EquiposPage = () => {
   const [participants, setParticipants] = useState([]);
   const [teams, setTeams] = useState({});
   const [selectedTeam, setSelectedTeam] = useState('all');
   const [message, setMessage] = useState('');
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [teamToDelete, setTeamToDelete] = useState(null);
+  const [showResult, setShowResult] = useState(false);
+  const [resultMessage, setResultMessage] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,26 +39,34 @@ const EquiposPage = () => {
   }, []);
 
   const handleDeleteTeam = async (teamName) => {
-    if (window.confirm(`¿Seguro que quieres eliminar el equipo "${teamName}"?`)) {
-      try {
-        const res = await fetch(import.meta.env.VITE_APP_API_URL + `/api/sorteo/equipo/${encodeURIComponent(teamName)}`, {
-          method: 'DELETE',
-        });
-        if (!res.ok) throw new Error('Error al eliminar el equipo');
-        setMessage(`Equipo "${teamName}" eliminado correctamente`);
-        // Refresca los datos
-        const updated = await fetch(import.meta.env.VITE_APP_API_URL + '/api/participants').then(r => r.json());
-        setParticipants(updated);
-        const grouped = updated.reduce((acc, p) => {
-          const t = p.equipo || 'Sin equipo';
-          if (!acc[t]) acc[t] = [];
-          acc[t].push(p);
-          return acc;
-        }, {});
-        setTeams(grouped);
-      } catch (err) {
-        setMessage('No se pudo eliminar el equipo');
-      }
+    setTeamToDelete(teamName);
+    setShowConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      const res = await fetch(import.meta.env.VITE_APP_API_URL + `/api/sorteo/equipo/${encodeURIComponent(teamToDelete)}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw new Error('Error al eliminar el equipo');
+      setResultMessage(`Equipo "${teamToDelete}" eliminado correctamente`);
+      setShowResult(true);
+      // Refresca los datos
+      const updated = await fetch(import.meta.env.VITE_APP_API_URL + '/api/participants').then(r => r.json());
+      setParticipants(updated);
+      const grouped = updated.reduce((acc, p) => {
+        const t = p.equipo || 'Sin equipo';
+        if (!acc[t]) acc[t] = [];
+        acc[t].push(p);
+        return acc;
+      }, {});
+      setTeams(grouped);
+    } catch (err) {
+      setResultMessage('No se pudo eliminar el equipo');
+      setShowResult(true);
+    } finally {
+      setShowConfirm(false);
+      setTeamToDelete(null);
     }
   };
 
@@ -78,6 +91,7 @@ const EquiposPage = () => {
         <select
           id="teamFilter"
           className="w-full p-3 rounded-lg text-black font-medium cursor-pointer
+            border-0 ring-0 focus:border-0 focus:ring-0
             focus:outline-none focus:ring-4 focus:ring-purple-400 transition-shadow"
           value={selectedTeam}
           onChange={e => setSelectedTeam(e.target.value)}
@@ -126,6 +140,60 @@ const EquiposPage = () => {
           </Card>
         ))
       )}
+
+      {/* Modal de confirmación */}
+      <Dialog.Root open={showConfirm} onOpenChange={setShowConfirm}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="DialogOverlay" />
+          <Dialog.Content className="DialogContent">
+            <Dialog.Title className="DialogTitle">¿Seguro que quieres eliminar el equipo "{teamToDelete}"?</Dialog.Title>
+            <div className="flex gap-4 mt-6 justify-center">
+              <button
+                className="bg-red-600 text-white px-4 py-2 rounded-lg
+                  transition-transform transition-shadow duration-150
+                  hover:scale-110 hover:shadow-2xl
+                  active:scale-95 active:shadow
+                  focus:outline-none focus:ring-2 focus:ring-red-400"
+                onClick={confirmDelete}
+              >
+                Sí, eliminar
+              </button>
+              <button
+                className="bg-gray-400 text-black px-4 py-2 rounded-lg
+                  transition-transform transition-shadow duration-150
+                  hover:scale-110 hover:shadow-2xl
+                  active:scale-95 active:shadow
+                  focus:outline-none focus:ring-2 focus:ring-gray-300"
+                onClick={() => setShowConfirm(false)}
+              >
+                Cancelar
+              </button>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+
+      {/* Modal de resultado */}
+      <Dialog.Root open={showResult} onOpenChange={setShowResult}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="DialogOverlay" />
+          <Dialog.Content className="DialogContent">
+            <Dialog.Title className="DialogTitle">{resultMessage}</Dialog.Title>
+            <div className="flex justify-center mt-6">
+              <button
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg
+                  transition-transform transition-shadow duration-150
+                  hover:scale-110 hover:shadow-2xl
+                  active:scale-95 active:shadow
+                  focus:outline-none focus:ring-2 focus:ring-blue-400"
+                onClick={() => setShowResult(false)}
+              >
+                Cerrar
+              </button>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </div>
   );
 };
