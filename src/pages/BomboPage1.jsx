@@ -1,4 +1,4 @@
-import Button from '../components/ui/Button'; 
+import Button from '../components/ui/Button';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ParticipantListV from '../components/ui/ParticipantListVisualization';
@@ -21,7 +21,13 @@ const BomboPage1 = () => {
       setEquipo(storedEquipo);
     }
 
-    fetch(import.meta.env.VITE_APP_API_URL + '/api/participants')
+    fetch(import.meta.env.VITE_APP_API_URL + '/api/participants', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-password': localStorage.getItem('clave')
+      }
+    })
       .then(res => res.json())
       .then(data => {
         const bombo1Participants = data.filter(p => p.bombo === 2);
@@ -52,7 +58,14 @@ const BomboPage1 = () => {
   const handleContinue = () => {
     if (!selected) return;
 
-    fetch(import.meta.env.VITE_APP_API_URL + `/api/sorteo/equipo/${equipo}`)
+    fetch(import.meta.env.VITE_APP_API_URL + `/api/sorteo/equipo/${equipo}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-password': localStorage.getItem('clave')
+        }
+      }
+    )
       .then(res => res.json())
       .then(data => {
         const bombo2Members = data.filter(m => m.bombo === 2);
@@ -61,7 +74,10 @@ const BomboPage1 = () => {
         } else {
           fetch(import.meta.env.VITE_APP_API_URL + '/api/sorteo/asignar', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'x-password': localStorage.getItem('clave')
+            },
             body: JSON.stringify({ _id: selected._id, equipo }),
           }).then(res => {
             if (res.ok) {
@@ -99,9 +115,8 @@ const BomboPage1 = () => {
         <Button
           onClick={startSlotMachine}
           disabled={rolling}
-          className={`bg-purple-700 hover:bg-purple-900 text-white font-bold px-12 py-6 rounded-xl shadow-lg transition-all ${
-            rolling ? 'cursor-not-allowed opacity-70' : ''
-          }`}
+          className={`bg-purple-700 hover:bg-purple-900 text-white font-bold px-12 py-6 rounded-xl shadow-lg transition-all ${rolling ? 'cursor-not-allowed opacity-70' : ''
+            }`}
           style={{ fontFamily: "'Orbitron', sans-serif", fontSize: '22px' }}
         >
           {rolling ? '🎰 Sorteando...' : '🎰 Sortear'}
@@ -111,7 +126,7 @@ const BomboPage1 = () => {
       <Dialog.Root open={modalOpen} onOpenChange={setModalOpen}>
         <Dialog.Portal>
           <Dialog.Overlay className="DialogOverlay" />
-          <Dialog.Content
+          <Dialog.Content aria-describedby={undefined}
             className="DialogContent bg-gradient-to-br from-indigo-950 via-indigo-800 to-purple-900 rounded-xl shadow-2xl p-6"
             style={{ maxWidth: '90vw', maxHeight: '90vh' }}
           >
@@ -126,19 +141,17 @@ const BomboPage1 = () => {
               {randomParticipants.map((participant, index) => (
                 <div
                   key={index}
-                  className={`p-3 rounded-xl border-4 cursor-pointer flex flex-col items-center transition-all duration-300 ${
-                    selected?._id === participant._id
-                      ? 'bg-blue-800 border-blue-400'
-                      : 'bg-gray-900 border-indigo-600 hover:border-yellow-300'
-                  }`}
+                  className={`p-3 rounded-xl border-4 cursor-pointer flex flex-col items-center transition-all duration-300 ${selected?._id === participant._id
+                    ? 'bg-blue-800 border-blue-400'
+                    : 'bg-gray-900 border-indigo-600 hover:border-yellow-300'
+                    }`}
                   onClick={() => !rolling && setSelected(participant)}
                 >
                   <img
                     src={participant.foto_url}
                     alt={participant.nickname}
-                    className={`w-32 h-32 rounded-full border-2 ${
-                      participant.equipo ? 'grayscale' : ''
-                    }`}
+                    className={`w-32 h-32 rounded-full border-2 ${participant.equipo ? 'grayscale' : ''
+                      }`}
                   />
                   <p
                     className="mt-2 text-lg font-medium text-white"

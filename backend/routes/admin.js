@@ -5,6 +5,16 @@ const Participant = require('../models/Participant');
 const auth = require('../middlewares/auth');
 const { upload } = require('../cloudinary');
 
+// Middleware para verificar si el usuario es admin
+router.post('/login', async (req, res) => {
+  const { password } = req.body;
+  if (password === process.env.CLAVE_ADMIN) {
+    return res.status(200).json({ mensaje: 'Acceso concedido' });
+  } else {
+    return res.status(401).json({ error: 'Acceso denegado' });
+  }
+});
+
 // Crear participante
 router.post('/crear', auth, upload.single('foto'), async (req, res) => {
   const { nickname, user_tiktok, bombo } = req.body;

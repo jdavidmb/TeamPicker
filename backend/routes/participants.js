@@ -4,11 +4,16 @@ const Participant = require('../models/Participant');
 
 // GET /api/participants - listar todos los participantes
 router.get('/', async (req, res) => {
-  try {
-    const participantes = await Participant.find();
-    res.json(participantes);
-  } catch (err) {
-    res.status(500).json({ error: 'Error al obtener participantes' });
+  const password = req.headers['x-password'];
+  if (password === process.env.CLAVE_ADMIN) {
+    try {
+      const participantes = await Participant.find();
+      res.json(participantes);
+    } catch (err) {
+      res.status(500).json({ error: 'Error al obtener participantes' });
+    }
+  } else {
+    return res.status(401).json({ error: 'Acceso denegado' });
   }
 });
 

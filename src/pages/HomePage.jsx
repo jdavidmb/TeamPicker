@@ -15,7 +15,13 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_APP_API_URL + '/api/participants')
+    fetch(import.meta.env.VITE_APP_API_URL + '/api/participants', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-password': localStorage.getItem('clave')
+      }
+    })
       .then(res => res.json())
       .then(data => {
         const bombo1Participants = data.filter(p => p.bombo === 1);
@@ -43,7 +49,10 @@ const HomePage = () => {
     try {
       fetch(import.meta.env.VITE_APP_API_URL + '/api/sorteo/asignar', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-password': localStorage.getItem('clave')
+        },
         body: JSON.stringify({ _id: selected._id, equipo: selected.nickname }),
       })
         .then(response => {
@@ -84,7 +93,7 @@ const HomePage = () => {
       </h2>
       <Button
         onClick={() => navigate('/equipos')}
-        style={{ fontFamily: "'Orbitron', sans-serif"}}
+        style={{ fontFamily: "'Orbitron', sans-serif" }}
       >
         Ver Equipos
       </Button>

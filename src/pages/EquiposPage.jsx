@@ -18,7 +18,13 @@ const EquiposPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_APP_API_URL + '/api/participants')
+    fetch(import.meta.env.VITE_APP_API_URL + '/api/participants', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-password': localStorage.getItem('clave')
+      }
+    })
       .then(res => res.json())
       .then(data => {
         setParticipants(data);
@@ -47,12 +53,22 @@ const EquiposPage = () => {
     try {
       const res = await fetch(import.meta.env.VITE_APP_API_URL + `/api/sorteo/equipo/${encodeURIComponent(teamToDelete)}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-password': localStorage.getItem('clave')
+        }
       });
       if (!res.ok) throw new Error('Error al eliminar el equipo');
       setResultMessage(`Equipo "${teamToDelete}" eliminado correctamente`);
       setShowResult(true);
       // Refresca los datos
-      const updated = await fetch(import.meta.env.VITE_APP_API_URL + '/api/participants').then(r => r.json());
+      const updated = await fetch(import.meta.env.VITE_APP_API_URL + '/api/participants', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-password': localStorage.getItem('clave')
+        }
+      }).then(r => r.json());
       setParticipants(updated);
       const grouped = updated.reduce((acc, p) => {
         const t = p.equipo || 'Sin equipo';
@@ -79,7 +95,7 @@ const EquiposPage = () => {
         Equipos y Participantes
       </h2>
 
-      <motion.div 
+      <motion.div
         className="max-w-lg mx-auto mb-8 p-6 rounded-xl bg-gradient-to-r from-indigo-700 via-purple-800 to-pink-700 shadow-xl flex flex-col items-center"
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -104,7 +120,7 @@ const EquiposPage = () => {
         </select>
 
         <Button
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/home')}
           className="mt-6 bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-8 rounded-full shadow-lg uppercase tracking-wider transition-colors"
         >
           Formar nuevo equipo
@@ -145,7 +161,7 @@ const EquiposPage = () => {
       <Dialog.Root open={showConfirm} onOpenChange={setShowConfirm}>
         <Dialog.Portal>
           <Dialog.Overlay className="DialogOverlay" />
-          <Dialog.Content className="DialogContent">
+          <Dialog.Content className="DialogContent" aria-describedby={undefined}>
             <Dialog.Title className="DialogTitle">¿Seguro que quieres eliminar el equipo "{teamToDelete}"?</Dialog.Title>
             <div className="flex gap-4 mt-6 justify-center">
               <button

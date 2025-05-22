@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Participant = require('../models/Participant');
+
 const {
   sortearDelBombo,
   asignarAParticipante,
@@ -21,12 +22,17 @@ router.get('/equipo', async (req, res) => {
 
 router.get('/equipo/:equipo', async (req, res) => {
   const equipo = req.params.equipo;
-  console.log('-------------')
-  try {
-    const integrantes = await Participant.find({ equipo });
-    res.json(integrantes);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  const password = req.headers['x-password'];
+  if (password === process.env.CLAVE_ADMIN) {
+    console.log('-------------')
+    try {
+      const integrantes = await Participant.find({ equipo });
+      res.json(integrantes);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  } else {
+    return res.status(401).json({ error: 'Acceso denegado' });
   }
 });
 
@@ -47,16 +53,20 @@ router.get('/:bombo', async (req, res) => {
 // Asignar participante a un equipo
 router.post('/asignar', async (req, res) => {
   const { _id, equipo } = req.body;
+  const password = req.headers['x-password'];
+  if (password === process.env.CLAVE_ADMIN) {
+    if (!_id || !equipo) {
+      return res.status(400).json({ error: 'Faltan datos: participantId o equipo.' });
+    }
 
-  if (!_id || !equipo) {
-    return res.status(400).json({ error: 'Faltan datos: participantId o equipo.' });
-  }
-
-  try {
-    const asignado = await asignarAParticipante(_id, equipo);
-    res.json(asignado);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+    try {
+      const asignado = await asignarAParticipante(_id, equipo);
+      res.json(asignado);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  } else {
+    return res.status(401).json({ error: 'Acceso denegado' });
   }
 });
 
@@ -73,14 +83,19 @@ router.post('/reiniciar', async (req, res) => {
 // Eliminar equipo
 router.delete('/equipo/:equipo', async (req, res) => {
   const equipo = req.params.equipo;
-  try {
-    const result = await Participant.updateMany(
-      { equipo },
-      { $unset: { equipo: "" } }
-    );
-    res.json({ mensaje: `Equipo "${equipo}" eliminado.`, result });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  const password = req.headers['x-password'];
+  if (password === process.env.CLAVE_ADMIN) {
+    try {
+      const result = await Participant.updateMany(
+        { equipo },
+        { $unset: { equipo: "" } }
+      );
+      res.json({ mensaje: `Equipo "${equipo}" eliminado.`, result });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  } else {
+    return res.status(401).json({ error: 'Acceso denegado' });
   }
 });
 
