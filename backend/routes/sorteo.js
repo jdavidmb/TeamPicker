@@ -70,4 +70,18 @@ router.post('/reiniciar', async (req, res) => {
   }
 });
 
+// Eliminar equipo
+router.delete('/equipo/:equipo', async (req, res) => {
+  const equipo = req.params.equipo;
+  try {
+    const result = await Participant.updateMany(
+      { equipo },
+      { $unset: { equipo: "" } }
+    );
+    res.json({ mensaje: `Equipo "${equipo}" eliminado.`, result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
