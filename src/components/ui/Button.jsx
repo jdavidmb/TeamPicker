@@ -11,6 +11,7 @@ const Button = ({ children, onClick, className = '', disabled = false }) => {
         shadow-[0_0_10px_rgba(75,0,130,0.4),0_0_20px_rgba(25,25,112,0.5)]
         hover:shadow-[0_0_20px_rgba(106,90,205,0.6),0_0_40px_rgba(72,61,139,0.8)]
         hover:scale-105 active:scale-95
+        hover:bg-indigo-900/80
         disabled:opacity-50 disabled:cursor-not-allowed
         ${className}
       `}

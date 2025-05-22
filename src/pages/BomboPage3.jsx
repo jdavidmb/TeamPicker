@@ -149,7 +149,7 @@ const BomboPage3 = () => {
                   <img
                     src={participant.foto_url}
                     alt={participant.nickname}
-                    className={`w-32 h-32 rounded-full border-2 ${participant.equipo ? 'grayscale' : ''
+                    className={`w-32 h-32 rounded-full border-2 object-cover${participant.equipo ? 'grayscale' : ''
                       }`}
                   />
                   <p

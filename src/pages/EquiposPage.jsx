@@ -162,7 +162,7 @@ const EquiposPage = () => {
         <Dialog.Portal>
           <Dialog.Overlay className="DialogOverlay" />
           <Dialog.Content className="DialogContent" aria-describedby={undefined}>
-            <Dialog.Title className="DialogTitle">¿Seguro que quieres eliminar el equipo "{teamToDelete}"?</Dialog.Title>
+            <Dialog.Title className="DialogTitle text-white">¿Seguro que quieres eliminar el equipo "{teamToDelete}"?</Dialog.Title>
             <div className="flex gap-4 mt-6 justify-center">
               <button
                 className="bg-red-600 text-white px-4 py-2 rounded-lg

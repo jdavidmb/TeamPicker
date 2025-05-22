@@ -116,7 +116,7 @@ const BomboPage2 = () => {
           disabled={rolling}
           className={`bg-purple-700 hover:bg-purple-900 text-white font-bold px-12 py-6 rounded-xl shadow-lg transition-all ${rolling ? 'cursor-not-allowed opacity-70' : ''
             }`}
-          style={{ fontFamily: "'Orbitron', sans-serif", fontSize: '22px' }}
+          style={{ fontFamily: "'Orbitron', sans-serif", fontSize: '24px' }}
         >
           {rolling ? '🎰 Sorteando...' : '🎰 Sortear'}
         </Button>
@@ -149,7 +149,7 @@ const BomboPage2 = () => {
                   <img
                     src={participant.foto_url}
                     alt={participant.nickname}
-                    className={`w-32 h-32 rounded-full border-2 ${participant.equipo ? 'grayscale' : ''
+                    className={`w-32 h-32 rounded-full border-2 object-cover ${participant.equipo ? 'grayscale' : ''
                       }`}
                   />
                   <p
