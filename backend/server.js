@@ -9,7 +9,8 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',   // React local
   'http://localhost:5000',   // Servidor local de páginas HTML (ej. live-server)
-  'https://team-picker-eosin.vercel.app'
+  'https://team-picker-eosin.vercel.app',
+  'https://teampicker-three.vercel.app'
 ];
 
 // Middleware

@@ -37,10 +37,10 @@ const StyledWrapper = styled.div`
   }
 
   .trash-svg {
-    width: 3em;
-    height: 3em;
+    width: 2.5em;
+    height: 2.5em;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.1));
     overflow: visible;
   }
 
