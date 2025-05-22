@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import { motion } from 'framer-motion';
+import TrashButton from '../components/ui/TrashButton'; // Agrega este import
 
 const EquiposPage = () => {
   const [participants, setParticipants] = useState([]);
@@ -118,12 +119,9 @@ const EquiposPage = () => {
               ))}
             </div>
             {teamName !== 'Sin equipo' && (
-              <Button
-                onClick={() => handleDeleteTeam(teamName)}
-                className="mt-6 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full shadow-lg uppercase tracking-wider transition-colors"
-              >
-                Eliminar equipo
-              </Button>
+              <div className="flex justify-center mt-6">
+                <TrashButton onClick={() => handleDeleteTeam(teamName)} title={`Eliminar equipo ${teamName}`} />
+              </div>
             )}
           </Card>
         ))
