@@ -12,7 +12,7 @@ const EquiposPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/participants')
+    fetch(import.meta.env.VITE_APP_API_URL + '/api/participants')
       .then(res => res.json())
       .then(data => {
         setParticipants(data);
@@ -35,13 +35,13 @@ const EquiposPage = () => {
   const handleDeleteTeam = async (teamName) => {
     if (window.confirm(`¿Seguro que quieres eliminar el equipo "${teamName}"?`)) {
       try {
-        const res = await fetch(`http://localhost:5000/api/sorteo/equipo/${encodeURIComponent(teamName)}`, {
+        const res = await fetch(import.meta.env.VITE_APP_API_URL + `/api/sorteo/equipo/${encodeURIComponent(teamName)}`, {
           method: 'DELETE',
         });
         if (!res.ok) throw new Error('Error al eliminar el equipo');
         setMessage(`Equipo "${teamName}" eliminado correctamente`);
         // Refresca los datos
-        const updated = await fetch('http://localhost:5000/api/participants').then(r => r.json());
+        const updated = await fetch(import.meta.env.VITE_APP_API_URL + '/api/participants').then(r => r.json());
         setParticipants(updated);
         const grouped = updated.reduce((acc, p) => {
           const t = p.equipo || 'Sin equipo';
