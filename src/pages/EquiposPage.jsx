@@ -12,7 +12,7 @@ const EquiposPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/participants')
+    fetch(import.meta.env.VITE_APP_API_URL + '/api/participants')
       .then(res => res.json())
       .then(data => {
         setParticipants(data);
