@@ -142,7 +142,7 @@ const BomboPage3 = () => {
                   key={index}
                   className={`p-3 rounded-xl border-4 cursor-pointer flex flex-col items-center transition-all duration-300 ${selected?._id === participant._id
                     ? 'bg-blue-800 border-blue-400'
-                    : 'bg-gray-900 border-indigo-600 hover:border-yellow-300'
+                    : 'bg-gray-900 border-indigo-600 hover:border-yellow-200 hover:scale-105 hover:shadow-xl hover:bg-indigo-999'
                     }`}
                   onClick={() => !rolling && setSelected(participant)}
                 >

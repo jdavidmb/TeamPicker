@@ -149,7 +149,7 @@ const EquiposPage = () => {
               ))}
             </div>
             {teamName !== 'Sin equipo' && (
-              <div className="flex justify-center mt-6">
+              <div className="flex justify-center mt-9">
                 <TrashButton onClick={() => handleDeleteTeam(teamName)} title={`Eliminar equipo ${teamName}`} />
               </div>
             )}

@@ -116,7 +116,7 @@ const BomboPage2 = () => {
           disabled={rolling}
           className={`bg-purple-700 hover:bg-purple-900 text-white font-bold px-12 py-6 rounded-xl shadow-lg transition-all ${rolling ? 'cursor-not-allowed opacity-70' : ''
             }`}
-          style={{ fontFamily: "'Orbitron', sans-serif", fontSize: '24px' }}
+          style={{ fontFamily: "'Orbitron', sans-serif", fontSize: '22px' }}
         >
           {rolling ? '🎰 Sorteando...' : '🎰 Sortear'}
         </Button>
@@ -142,7 +142,7 @@ const BomboPage2 = () => {
                   key={index}
                   className={`p-3 rounded-xl border-4 cursor-pointer flex flex-col items-center transition-all duration-300 ${selected?._id === participant._id
                     ? 'bg-blue-800 border-blue-400'
-                    : 'bg-gray-900 border-indigo-600 hover:border-yellow-300'
+                    : 'bg-gray-900 border-indigo-600 hover:border-yellow-200 hover:scale-105 hover:shadow-xl hover:bg-indigo-999'
                     }`}
                   onClick={() => !rolling && setSelected(participant)}
                 >
