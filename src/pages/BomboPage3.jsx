@@ -96,10 +96,9 @@ const BomboPage3 = () => {
   };
 
   return (
-    <div className="p-4 min-h-screen bg-gradient-to-tr from-black via-indigo-900 to-purple-900 text-white font-sans">
+    <div className="p-4 min-h-screen bg-gradient-to-tr from-black via-indigo-900 to-purple-900 font-orbitron">
       <h2
-        className="text-3xl font-bold mb-6 text-center"
-        style={{ fontFamily: "'Orbitron', sans-serif" }}
+      className="text-4xl font-extrabold mb-8 text-center" style={{ textShadow: '0 0 6px #003366, 0 0 12px #003366' }}
       >
         Sorteo de Equipos: Seguidora 🎮
       </h2>
@@ -111,15 +110,14 @@ const BomboPage3 = () => {
       )}
 
       <div className="flex justify-center mb-4">
-        <Button
+        <button
           onClick={startSlotMachine}
           disabled={rolling}
-          className={`bg-purple-700 hover:bg-purple-900 text-white font-bold px-12 py-6 rounded-xl shadow-lg transition-all ${rolling ? 'cursor-not-allowed opacity-70' : ''
-            }`}
+          className={`custom-button`}
           style={{ fontFamily: "'Orbitron', sans-serif", fontSize: '22px' }}
         >
           {rolling ? '🎰 Sorteando...' : '🎰 Sortear'}
-        </Button>
+        </button>
       </div>
 
       <Dialog.Root open={modalOpen} onOpenChange={setModalOpen}>

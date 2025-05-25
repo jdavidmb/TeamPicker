@@ -2,7 +2,7 @@
 
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Orbitron';
   line-height: 1.5;
   font-weight: 400;
 
@@ -39,10 +39,7 @@ h1 {
 button:hover {
   border-color: #646cff;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -53,4 +50,71 @@ button:focus-visible {
     color: #747bff;
   }
 
+}
+button.custom-button {
+  position: relative;
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-radius: 0.75rem;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease-in-out;
+  color: #ffffff;
+  background: linear-gradient(135deg, #1e1e60, #3b0a70); /* azul profundo a morado */
+  border: 2px solid #5f00a7;
+  text-shadow: 0 0 5px #8888ff, 0 0 10px #6a0dad;
+  box-shadow:
+    0 0 10px #5f00a7,
+    0 0 20px #1e1e80,
+    0 0 30px #3b0a70,
+    inset 0 0 6px #ffffff20;
+  cursor: pointer;
+  overflow: hidden;
+  z-index: 1;
+}
+
+button.custom-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(120, 120, 255, 0.15) 0%, transparent 70%);
+  animation: shine 3s linear infinite;
+  z-index: 0;
+}
+
+@keyframes shine {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+button.custom-button:hover {
+  transform: scale(1.08);
+  background: linear-gradient(135deg, #2c2c8a, #5f00a7);
+  box-shadow:
+    0 0 15px #6a0dad,
+    0 0 30px #3333cc,
+    0 0 40px #4b0082;
+  border-color: #8a2be2;
+}
+
+button.custom-button:active {
+  transform: scale(0.95);
+  box-shadow:
+    0 0 10px #4b0082,
+    0 0 20px #1e1e60;
+}
+
+button.custom-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(80%);
 }

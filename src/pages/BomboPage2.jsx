@@ -96,11 +96,8 @@ const BomboPage2 = () => {
   };
 
   return (
-    <div className="p-4 min-h-screen bg-gradient-to-tr from-black via-indigo-900 to-purple-900 text-white font-sans">
-      <h2
-        className="text-3xl font-bold mb-6 text-center"
-        style={{ fontFamily: "'Orbitron', sans-serif" }}
-      >
+    <div className="p-4 min-h-screen bg-gradient-to-tr from-black via-indigo-900 to-purple-900 text-white font-orbitron">
+      <h2 className="text-4xl font-extrabold mb-8 text-center" style={{ textShadow: '0 0 6px #003366, 0 0 12px #003366' }}>
         Sorteo de Equipos: Seguidor 🎮
       </h2>
 
@@ -111,28 +108,24 @@ const BomboPage2 = () => {
       )}
 
       <div className="flex justify-center mb-4">
-        <Button
+        <button
           onClick={startSlotMachine}
           disabled={rolling}
-          className={`bg-purple-700 hover:bg-purple-900 text-white font-bold px-12 py-6 rounded-xl shadow-lg transition-all ${rolling ? 'cursor-not-allowed opacity-70' : ''
-            }`}
-          style={{ fontFamily: "'Orbitron', sans-serif", fontSize: '22px' }}
+          className={`custom-button`}
+          style={{ fontSize: '22px' }}
         >
           {rolling ? '🎰 Sorteando...' : '🎰 Sortear'}
-        </Button>
+        </button>
       </div>
 
       <Dialog.Root open={modalOpen} onOpenChange={setModalOpen}>
         <Dialog.Portal>
           <Dialog.Overlay className="DialogOverlay" />
-          <Dialog.Content aria-describedby={undefined}
+          <Dialog.Content
             className="DialogContent bg-gradient-to-br from-indigo-950 via-indigo-800 to-purple-900 rounded-xl shadow-2xl p-6"
             style={{ maxWidth: '90vw', maxHeight: '90vh' }}
           >
-            <Dialog.Title
-              className="text-3xl text-center text-blue-300 mb-6"
-              style={{ fontFamily: "'Orbitron', sans-serif" }}
-            >
+            <Dialog.Title className="text-3xl text-center text-blue-300 mb-6">
               Selecciona un participante
             </Dialog.Title>
 
@@ -152,10 +145,7 @@ const BomboPage2 = () => {
                     className={`w-32 h-32 rounded-full border-2 object-cover ${participant.equipo ? 'grayscale' : ''
                       }`}
                   />
-                  <p
-                    className="mt-2 text-lg font-medium text-white"
-                    style={{ fontFamily: "'Orbitron', sans-serif" }}
-                  >
+                  <p className="mt-2 text-lg font-medium text-white">
                     {participant.nickname}
                   </p>
                 </div>
@@ -190,10 +180,7 @@ const BomboPage2 = () => {
                         d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
                       />
                     </svg>
-                    <p
-                      className="text-yellow-300 text-2xl font-semibold"
-                      style={{ fontFamily: "'Orbitron', sans-serif" }}
-                    >
+                    <p className="text-yellow-300 text-2xl font-semibold">
                       Sorteando...
                     </p>
                   </>
@@ -216,10 +203,7 @@ const BomboPage2 = () => {
                         d="M5 13l4 4L19 7"
                       />
                     </svg>
-                    <p
-                      className="text-green-300 text-2xl font-semibold"
-                      style={{ fontFamily: "'Orbitron', sans-serif" }}
-                    >
+                    <p className="text-green-300 text-2xl font-semibold">
                       ¡Listo!
                     </p>
 
@@ -240,17 +224,11 @@ const BomboPage2 = () => {
 
             {selected && (
               <div className="mt-6 text-center">
-                <p
-                  className="text-2xl text-yellow-200 mb-4"
-                  style={{ fontFamily: "'Orbitron', sans-serif" }}
-                >
+                <p className="text-2xl text-yellow-200 mb-4">
                   Has seleccionado a: <span className="text-white">{selected.nickname}</span>
                 </p>
                 <Dialog.Close asChild>
-                  <Button
-                    onClick={handleContinue}
-                    style={{ fontFamily: "'Orbitron', sans-serif" }}
-                  >
+                  <Button onClick={handleContinue}>
                     Continuar formando el equipo ➡️
                   </Button>
                 </Dialog.Close>
@@ -268,4 +246,3 @@ const BomboPage2 = () => {
 };
 
 export default BomboPage2;
-

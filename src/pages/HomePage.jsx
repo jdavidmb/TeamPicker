@@ -83,20 +83,20 @@ const HomePage = () => {
   };
 
   return (
-    <motion.div className="p-6 min-h-screen flex flex-col items-center bg-gradient-to-tr from-black via-indigo-900 to-purple-900 text-white"
+    <motion.div className="p-6 min-h-screen flex flex-col items-center bg-gradient-to-tr from-black via-indigo-900 to-purple-900"
       style={{ fontFamily: "'Orbitron', sans-serif" }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}>
+>
       <h2 className="text-4xl font-extrabold mb-8 text-center" style={{ textShadow: '0 0 6px #003366, 0 0 12px #003366' }}>
         Sorteo de Equipos: Streamers
       </h2>
-      <Button
+      <button
         onClick={() => navigate('/equipos')}
         style={{ fontFamily: "'Orbitron', sans-serif" }}
+        
+        className={`custom-button`}
       >
         Ver Equipos
-      </Button>
+      </button>
       <div style={{ height: 10 }} />
       <Card className="max-w-2xl w-full mb-2 border-4 border-gray-700 shadow-xl p-6">
         {selected ? (
@@ -119,7 +119,7 @@ const HomePage = () => {
                     {selected.nickname}
                   </Dialog.Description>
                   <Dialog.Close asChild>
-                    <button onClick={handleContinue} className="bg-blue-600 text-white px-4 py-2 rounded-lg mt-2"
+                    <button onClick={handleContinue} className={`custom-button`}
                       style={{ fontFamily: "'Orbitron', sans-serif" }}
                     >Continuar ➡️</button>
                   </Dialog.Close>
